@@ -79,7 +79,7 @@ const svg = d3.select("#scatter")
           .append("circle")
           .attr("cx", d => xLinearScale(d.poverty))
           .attr("cy", d => yLinearScale(d.healthcare))
-          .attr("r", "10")
+          .attr("r", "20")
           .classed("stateCircle", true)
           .attr("opacity", "1");
 
@@ -105,7 +105,7 @@ const svg = d3.select("#scatter")
 
 
     
-
+        // Axes formatting
         chartGroup.append("text")
           .attr("transform", "rotate(-90)")
           .attr("y", 0 - margin.left)
@@ -120,6 +120,26 @@ const svg = d3.select("#scatter")
           .classed('axisText', true)
           .text("In Poverty (%)");
 
+        // Tooltips
+        // Step 1: Initialize Tooltip
+        const toolTip = d3.tip()
+        .attr("class", "tooltip")
+        .offset([80, 60])
+        .html(function (d) {
+          return (`<strong>${d.state}</strong><hr>Poverty: ${d.poverty}%<br/>Lacks Healthcare: ${d.healthcare}%`);
+        });
+
+        // Step 2: Create the tooltip in chartGroup.
+        chartGroup.call(toolTip);
+
+        // Step 3: Create "mouseover" event listener to display tooltip
+        circlesGroup.on("mouseover", function (d) {
+        toolTip.show(d, this);
+        })
+        // Step 4: Create "mouseout" event listener to hide tooltip
+        .on("mouseout", function (d) {
+          toolTip.hide(d);
+        });
 
   
 
